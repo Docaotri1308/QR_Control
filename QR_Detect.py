@@ -412,7 +412,7 @@ def ReceiveData(q):
         if count_step4 == config["count_step4"]: 
             count_step4 = 0 
             if q.qsize() == 0:
-                q.put(50)
+                q.put(12)
             if q.qsize() == 1: 
                 q.put(65)       
             if q.qsize() == 2:
@@ -494,7 +494,6 @@ def doOpenCV(q, q2):
     angle               = 0
     T_x                 = 315 
     T_y                 = 245
-    counter             = 0 
     pre_angle           = 500
     count_send          = 0
     count               = 0
@@ -513,8 +512,8 @@ def doOpenCV(q, q2):
     frame_size = (frame_width, frame_height)
 
     # Define the codec and create VideoWriter object
-    fourcc = cv.VideoWriter_fourcc(*'XVID')  # Codec của video (ở đây sử dụng XVID)
-    out = cv.VideoWriter('output_video.avi', fourcc, 8, (480, 640))
+    fourc = cv.VideoWriter_fourcc(*'XVID')  # Codec của video (ở đây sử dụng XVID)
+    out = cv.VideoWriter('output_video.avi', fourc, 8, (480, 640))
     
     _, frame = cap.read()
     old_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -537,10 +536,10 @@ def doOpenCV(q, q2):
                 list_process_backward = [7 if i == 8 else i for i in list_process]
                 list_process_backward.reverse()
             list_process.append(12)
-            list_process_iter   = iter(list_process)
+            list_process_iter = iter(list_process)
             
-            list_process_backward_iter = iter(list_process_backward)
-            step_process_backward = [step_process[1], step_process[0]]
+            list_process_backward_iter  = iter(list_process_backward)
+            step_process_backward       = [step_process[1], step_process[0]]
             
             if step_process_backward[0] == 0:
                 step_process_backward[0] = 3
@@ -564,17 +563,14 @@ def doOpenCV(q, q2):
             print(f"step_process = {step_process}")
         if q2.qsize() == 1:
             run = q2.get()
-        
+
         if list_process: 
             count_image += 1 
-            count_pub = 1
-            counter += 1
             frame_counter += 1
             _, frame = cap.read()
             # print(type(frame))
             cv.imwrite(f"/home/pi/adu_final/final/images/number{count_image}.png", frame)
             # out.write(frame)
-           
             # cv.line(frame, (65, 70), (565, 70), (255, 255, 0), 2)
             # cv.line(frame, (565, 70), (565, 420), (255, 255, 0), 2)
             # cv.line(frame, (565, 420), (65, 420), (255, 255, 0), 2)
@@ -627,7 +623,6 @@ def doOpenCV(q, q2):
                 (rv, points, straight_qrcode) = cv.QRCodeDetector().detectAndDecode(frame)
                 if rv:
                     points = points[0]
-
                     # Toa do dung cua ma QR
                     pt1 = points[0] 
                     pt2 = points[1]
@@ -640,10 +635,7 @@ def doOpenCV(q, q2):
                     angle = atan2(b - a, c - d)
                     angle = (angle * 180 / pi) 
 
-
-                    
                     if pre_angle > angle - 2 or pre_angle < angle + 2: 
-                        
                         count_send += 1 
                     pre_angle = angle
                     # print(f"**************G_x - 315   = {G_x - 315}")
@@ -654,16 +646,14 @@ def doOpenCV(q, q2):
                         # print(f"angle is {angle}")
                         # print(f"count is {count}")
                         count_send = 0
-
                         if tProcess == pNONE:
                             print('doOpenCV into tprocess == pNONE')
                             tProcess = pSTEP1
                             # tProcess = pSTOP 
                             # tProcess = pSTEP3
                         elif tProcess == pSTEP1:
-                    
                             angle_point = round(ComputeAngle(p2_x, p2_y, p4_x, p4_y, T_x, T_y))
-                            distance = round(ComputeDistance(p2_x, p2_y, p4_x, p4_y, T_x, T_y))
+                            distance    = round(ComputeDistance(p2_x, p2_y, p4_x, p4_y, T_x, T_y))
                             G_x = (p2_x + p4_x) / 2.0
                             # print(f'doOpenCV into tProcess == pSTEP1 and distance = {distance}')
                             '''
@@ -671,15 +661,13 @@ def doOpenCV(q, q2):
                             + Neu angle_point nho hon 20 thi bo qua hai buoc pSTEP1 (angle_point) va pSTEP2 (distance)
                             + Con lon hon 20 thi cho di 
                             '''
-
                             print(f"**************angle_point = {angle_point}")
                             print(f"**************distance    = {distance}")
                             print(f"**************angle       = {angle}")
                             print(f"**************G_x - 315   = {G_x - 315}")
                             if abs(G_x - 315) > config["saturation"]:
                                 if q.qsize() == 0:
-                                    q.put(int(angle_point))   
-
+                                    q.put(int(angle_point))  
                                 if q.qsize() == 1:
                                     if abs(angle_point) > 90:
                                         q.put(BackFlag) # di lui, goc lon hon 90
@@ -687,21 +675,14 @@ def doOpenCV(q, q2):
                                         q.put(HeadFlag) # di toi, goc nho hon 90 
                                 if q.qsize() == 2: 
                                     q.put(int(distance)) 
-                        
-                                ## Code add 27.4.2023 fix calib 3 nếu calib 1 và calib 2 thực hiện được 
-                            
-
                                 SendData(1111,1111,1111,1,1)       
                             else: 
                                 tProcess = pSTEP3
                                 if q3.qsize() == 0: 
                                     q3.put("terminate")
-                            
                             count_step3 = 0
-                        #
                         # Calib flag nên quăng vào trong này để xử lý 
-                        # Ý tưởng để xử lý: 
-                        #                    
+                        # Ý tưởng để xử lý:   
                         elif tProcess == pSTEP3:
                             count_step3 += 1 
                             print(f"count_step3 = {count_step3} in tProcess = pSTEP3")
@@ -726,16 +707,13 @@ def doOpenCV(q, q2):
                                 count_step3 = 0 
                                 print(q3.get())
                                 print(f"size of q after geting data {q3.qsize()}")
-                                SendData(1111,1111,1111,1,1)  
-                            
+                                SendData(1111,1111,1111,1,1)                           
                             if q.qsize() == 2 and count_step3 > 5: 
                                count_step3 = 0 
-                               SendData(1111,1111,1111,1,1)
-                        
+                               SendData(1111,1111,1111,1,1)                        
                             count_step4 = 0 
                         elif tProcess == pSTEP4:
-                            # print(f"into tProcess == pSTEP4 and q.qsize() = {q.qsize()}, q3.qsize() = {q3.qsize()}")
-                        
+                            # print(f"into tProcess == pSTEP4 and q.qsize() = {q.qsize()}, q3.qsize() = {q3.qsize()}")                       
                             print(f"count_step4 = {count_step4} in tProcess == pSTEP4")
                             distance = round(ComputeDistance(p2_x, p2_y, p4_x, p4_y, T_x, T_y))
                             # print(f"G_y = {G_y}")
@@ -758,14 +736,13 @@ def doOpenCV(q, q2):
                                     SendData(1111,1111,1111,1,1)
                                 elif q.qsize() == 2 and count_step4 > 5:
                                     count_step4 = 0 
-                                    SendData(1111,1111,1111,1,1)
-                                
+                                    SendData(1111,1111,1111,1,1)                               
                         # Giữa hai hành động trong list_process là quá trình calib
                         elif tProcess == pSTEPDONE:
                             # Lý do count == 1 nằm phía trên để chứ không phải dưới count == 0 -> ngẫm một tí là hiểu 
                             if count == 1: 
                                 tProcess = next(list_process_backward_iter)
-                                if tProcess == 8: 
+                                if tProcess == 8:
                                     L = 'reduce_distance'
                                 if tProcess == 7 or tProcess == 8:
                                     step_mode = 1 
