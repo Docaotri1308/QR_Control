@@ -1,0 +1,15 @@
+{
+   "coefficient": 3.7,
+   "vel_doAngle": 30,
+   "acc_doAngle": 20,
+   "vel_doDistance": 15,
+   "acc_doDistance": 10,
+   "back_doDistance": 0.8,
+   "head_doDistance": 0.4,
+   "vel_doCorrect": 20,
+   "acc_doCorrect":15,
+   "saturation": 20,      
+   "count_step4":10, 
+   "back_doCorrectDistance": 0.6,
+   "head_doCorrectDistance": 0.2
+}
