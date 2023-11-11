@@ -8,8 +8,8 @@
    "head_doDistance": 0.4,
    "vel_doCorrect": 20,
    "acc_doCorrect":15,
-   "saturation": 20,      
-   "count_step4":10, 
+   "saturation": 10,      
+   "count_step4":5, 
    "back_doCorrectDistance": 0.6,
    "head_doCorrectDistance": 0.2
 }
