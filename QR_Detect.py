@@ -430,48 +430,56 @@ def Receive_Data(qDATA):
                     tPROCESS = State.pSTEP1
                     
             elif tPROCESS   == State.pSTEP1:
+                print(f'into tProcess == pSTEP1 condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 3:
                     Do_Angle(qDATA)
                 else:
                     continue
             
             elif tPROCESS   == State.pSTEP2:
+                print(f'into tProcess == pSTEP2 condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 2:
                     Do_Distance(qDATA)
                 else:
                     continue
                 
             elif tPROCESS   == State.pSTEP3:
+                print(f'into tProcess == pSTEP3 condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 2:
                     Do_Correct(qDATA)
                 else:
                     continue
                 
             elif tPROCESS   == State.pSTEP4:
+                print(f'into tProcess == pSTEP4 condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 2:
                     Do_Correct_Distance(qDATA)
                 else:
                     continue
                 
             elif tPROCESS   == State.pRUN:
+                print(f'into tProcess == pRUN condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 0:
                     Do_Head(qDATA)
                 else:
                     continue
                 
             elif tPROCESS   == State.pROTATELEFT:
+                print(f'into tProcess == pROTATELEFT condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 0:
                     Do_Rotate_Left(qDATA)
                 else:
                     continue
                 
             elif tPROCESS   == State.pROTATERIGHT:
+                print(f'into tProcess == pROTATERIGHT condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 0:
                     Do_Rotate_Right(qDATA)
                 else:
                     continue
                 
             elif tPROCESS   == State.pBACK:
+                print(f'into tProcess == pBACK condition and size of q = {qDATA.qsize()}')
                 if qDATA.qsize() == 0:
                     Do_Back(qDATA)
                 else:
@@ -483,19 +491,19 @@ def Do_OpenCV(qDATA, qGUI2DATA):
     global i
     print("Into Do_OpenCV thread")
     
-    T_x                     = 315
-    T_y                     = 245
-    angle                   = 0
-    distance                = 0
-    angle_point             = 0
-    count                   = 0             # Forward or Backward
-    count_img               = 0
-    counter                 = 0
-    count_send              = 0
-    step_mode               = 0             # Between 2 mode in step_process
-    pre_angle               = 500
-    run                     = None
-    pre_message             = None
+    T_x             = 315
+    T_y             = 245
+    angle           = 0
+    distance        = 0
+    angle_point     = 0
+    count           = 0             # Forward or Backward
+    count_img       = 0
+    counter         = 0
+    count_send      = 0
+    step_mode       = 0             # Between 2 mode in step_process
+    pre_angle       = 500
+    run             = None
+    pre_message     = None
     
     cap = cv.VideoCapture(-1)
     frame_width     = int(cap.get(3))
@@ -689,7 +697,7 @@ def Do_OpenCV(qDATA, qGUI2DATA):
                             
                         elif tPROCESS == State.pSTEP4:
                             print(f"count_step4 = {count_step4} in tPROCESS = pSTEP4")
-                            distance = round(distance = round(ComputeDistance(p2_x, p2_y, p4_x, p4_y, T_x, T_y)))
+                            distance = round(distance = round(Compute_Distance(p2_x, p2_y, p4_x, p4_y, T_x, T_y)))
                             if (abs(angle) > 170) or (abs(angle) > 80 and abs(angle) < 100) or (abs(angle) < 10):
                                 G_y = (p2_y + p4_y) / 2.0
                                 print(f"G_y = {G_y}")
@@ -714,6 +722,7 @@ def Do_OpenCV(qDATA, qGUI2DATA):
                                     Send_Data(1111,1111,1111,1,1)
                                     
                         elif tPROCESS == State.pSTEPDONE:
+                            print(f"Into tPROCESS = pSTEPDONE")
                             if count == 1:
                                 tPROCESS == next(list_process_backward_iter)
                                 if tPROCESS == State.pROTATERIGHT:
@@ -745,8 +754,8 @@ def Do_OpenCV(qDATA, qGUI2DATA):
                 AiPhile.textBGoutline(frame, f'Detection: Optical Flow', (30,80), scaling=0.5,text_color=AiPhile.GREEN)
                 cv.circle(frame, (new_points[0]), 3,AiPhile.GREEN, 2)
                 
-            old_gray = gray_frame.copy()
-            key = cv.waitKey(1)
+            old_gray    = gray_frame.copy()
+            key         = cv.waitKey(1)
             if key == ord("s"):
                 cv.imwrite(f'reference_img/Ref_img{frame_counter}.png', img)
             if key == ord("q"):
