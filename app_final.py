@@ -410,23 +410,23 @@ def ReceiveData(q):
                     tProcess = pCALIB1 
                            
             elif tProcess == pCALIB1: # pCALIB1 = 2 
-                # print(f'into tProcess == pCALIB1 condition and size of q = {q.qsize()}')
+                print(f'into tProcess == pCALIB1 condition and size of q = {q.qsize()}')
                 if q.qsize() == 3: 
                     doAngle(q)
                 else: 
                     continue 
             elif tProcess == pCALIB2: # pCALIB2 = 3 
-                # print(f'into tProcess == pCALIB2 condition and size of q = {q.qsize()}')
+                print(f'into tProcess == pCALIB2 condition and size of q = {q.qsize()}')
                 if q.qsize() == 2:
                     doDistance(q)
                 else: 
                     continue 
             elif tProcess == pCALIB3: # pCALIB3 = 4 
-                # print(f'into tProcess == pCALIB3 condition and size of q = {q.qsize()}') 
+                print(f'into tProcess == pCALIB3 condition and size of q = {q.qsize()}') 
                 if q.qsize() == 2:
                     doCorrect(q)
                 else:  
-                    # print(f"RecieveData into tProcess == pCALIB3 but can't do function doCorrect(q) because q.qsize()={q.qsize()}")
+                    print(f"RecieveData into tProcess == pCALIB3 but can't do function doCorrect(q) because q.qsize()={q.qsize()}")
                     continue  
             elif tProcess == pCALIB4: # pCALIB4 = 9 
                 print(f'ReceiveData tProcess == pCALIB4 condition and size of q = {q.qsize()}')
@@ -435,13 +435,13 @@ def ReceiveData(q):
                 else: 
                     continue
             elif tProcess == pRUN:
-                # print(f'into tProcess == pRUN condition and size of q = {q.qsize()}')
+                print(f'into tProcess == pRUN condition and size of q = {q.qsize()}')
                 if q.qsize() == 0:
                     doHead(q)
                 else: 
                     continue 
             elif tProcess == pROTATELEFT: 
-                # print(f"into tProcess == pROTATELEFT condition and size of q = {q.qsize()}")
+                print(f"into tProcess == pROTATELEFT condition and size of q = {q.qsize()}")
                 if q.qsize() == 0:
                     doRotateLeft(q)
                 else: 

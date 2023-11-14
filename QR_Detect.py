@@ -178,7 +178,7 @@ def Subscribe(client: mqtt_client):
             if qGUI2DATA.qsize() == 1:
                 qGUI2DATA.put("run")
                 
-    client.SUBSCRIBE(topic_sub)
+    client.Subscribe(topic_sub)
     client.On_Message = On_Message
     
 def Publish(client):
